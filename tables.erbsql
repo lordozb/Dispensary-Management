@@ -1,0 +1,19 @@
+/*
+ * THESE TABLE ARE USED FOR EMPLOYEE DATA.
+ */
+
+
+create table EMPLOYEE (
+						Eid number(5) primary key,
+						Ename char(30),
+						Designation char(30));
+
+create table LOGIN (
+					Eid number(5) references EMPLOYEE(Eid),
+					Password char(30));
+
+create table Attendance (
+							Eid number(5) references EMPLOYEE(Eid),
+							tdate date,
+							attendance char(2) check(attendance in('P','A')));
+
