@@ -1,0 +1,60 @@
+/*
+ * PROCEDURE TO ADD AN EMPLOYEE.
+ */
+
+create or replace PROCEDURE add_employee(
+ 											id IN number,
+ 											name IN char,
+ 											designation IN char,
+ 											password IN char ) IS
+begin
+ 	insert into EMPLOYEE Values(id,
+ 								name,
+ 								designation);
+ 	insert into LOGIN Values(id,
+ 							password);
+end;
+
+
+ /*
+  * PROCEDURE TO TAKE ATTENDANCE OF EMPLOYEE.
+  */
+
+create or replace PROCEDURE take_attendance(
+  												id IN number,
+  												attendance IN char) IS
+begin 
+ 	insert into ATTENDANCE Values(id, sysdate, attendance);
+end;
+
+
+/*
+ * FUNCTION TO LOG INTO THE SYSTEM.
+ */
+
+create or replace FUNCTION to_login(
+ 										id IN number,
+ 										pass IN char) RETURN number IS
+flag number(1);
+passcheck LOGIN.password%type;
+	
+
+begin
+	select password into passcheck from LOGIN where EID = id;
+
+-- CHECK FOR EXCEPTION IN THE CALLING BLOCK FOR VALID PASSWORD .
+if passcheck = pass then
+	flag := 1;
+	return flag;
+	
+else
+	flag := 0;
+	return flag;
+
+end if;
+
+EXCEPTION
+	when no_data_found then
+		flag := -1;
+		return flag; 
+end;
