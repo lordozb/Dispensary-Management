@@ -58,3 +58,87 @@ EXCEPTION
 		flag := -1;
 		return flag; 
 end;
+
+
+/*
+ * PROCEDURE TO CHANGE THE PASSWORD.
+ */
+
+create or replace FUNCTION change_password(
+											id IN number,
+											pass IN char) return number IS
+begin
+	update LOGIN set password = pass where eid = id;
+		-- Handle the exception.
+	if SQL%ROWCOUNT = 0 then
+		return -1;
+	end if;
+end;
+
+
+/*
+ * PROCEDURE TO UPDATE EMPLOYEE TABLE
+ */
+
+ create or replace FUNCTION update_employee(
+ 												id IN number,
+ 												name IN char,
+ 												designation IN char) return number IS
+ begin
+ 	update EMPLOYEE set eid = id, ename = name, designation = designation where eid = id;
+ 		-- Need to use the trigger here and handle the exception.
+ 		if SQL%ROWCOUNT = 0 then
+ 			return -1;
+ 		else
+ 			return 0;
+ 		end if;
+ end;
+
+
+/*
+ * PROCEDURE TO DELETE EMPLOYEE 
+ */
+
+ create or replace PROCEDURE delete_employee(
+ 												id IN number) IS
+
+ begin
+ 	delete employee where eid = id;
+ end;
+
+
+--PROCEDURES
+-- NOTE - ALL ERROR HANDLING HAS BEEN TAKEN CARE IN THE EXECUTION BLOCK FILE.
+
+create or replace PROCEDURE get_employee_designation(
+														desig IN char) IS
+
+CURSOR E is select * from EMPLOYEE where designation =  desig;
+begin
+	for x in E loop
+		dbms_output.put_line(x.eid||' '||x.ename||' '||x.designation);
+		exit when E%NOTFOUND;
+	end loop;
+end;
+
+create or replace PROCEDURE get_employee AS
+CURSOR E is select * from EMPLOYEE ;
+begin
+	for x in E loop
+		dbms_output.put_line(x.eid||' '||x.ename||' '||x.designation);
+		exit when E%NOTFOUND;
+	end loop;
+end;
+
+create or replace PROCEDURE get_attendance (
+												name IN char) IS
+CURSOR E is select eid, ename from EMPLOYEE where ename = name;
+CURSOR A(n number) is select attendance from ATTENDANCE where eid = n;
+begin
+	for x in E loop
+		for y in A(x.eid) loop
+			dbms_output.put_line(x.eid||' '||x.ename||' '||y.attendance);
+	end loop;
+	end loop;
+end;	
+
