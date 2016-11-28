@@ -1,6 +1,7 @@
 /*
  * EXECUTION BLOCK OF EMPLOYEE RELATED TABLE.
  */
+
  
  -- FOR INSERTION OF EMPLOYEES, TAKING ATTENDANCE, LOGIN.
  declare
@@ -14,7 +15,9 @@
  	wrong_pass EXCEPTION;
  	wrong_id EXCEPTION;
  	wrong_attendance EXCEPTION;
+ 	unique_id EXCEPTION;
  	pragma Exception_init(wrong_attendance,-2290);
+ 	pragma Exception_init(unique_id, -0001);
  begin
  	id := &eid;
  	name := &ename;
@@ -42,12 +45,17 @@
  		dbms_output.put_line('Invaild Id');
  	when wrong_attendance then
  		dbms_output.put_line('Only use A for absent and P for present');
+ 	when unique_id then
+ 		dbms_output.put_line('ID already in use');
  	when OTHERS then
  		dbms_output.put_line('Yet to be implemented. Please contact the developer.');
 
  end;
 
- -- RETRIEVAL OF TABLES RELATED TO EMPLOYEEES.
+ 
+
+
+
 
 
 
