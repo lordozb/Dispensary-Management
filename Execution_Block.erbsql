@@ -1,0 +1,53 @@
+/*
+ * EXECUTION BLOCK OF EMPLOYEE RELATED TABLE.
+ */
+ 
+ -- FOR INSERTION OF EMPLOYEES, TAKING ATTENDANCE, LOGIN.
+ declare
+ 	id EMPLOYEE.eid%type;
+ 	name EMPLOYEE.ename%type;
+ 	desig EMPLOYEE.designation%type;
+ 	pass LOGIN.password%type;
+ 	att  ATTENDANCE.attendance%type;
+ 	flag number(1);
+
+ 	wrong_pass EXCEPTION;
+ 	wrong_id EXCEPTION;
+ 	wrong_attendance EXCEPTION;
+ 	pragma Exception_init(wrong_attendance,-2290);
+ begin
+ 	id := &eid;
+ 	name := &ename;
+ 	desig := &designation;
+ 	pass := &password;
+ 	att := &attendance;
+
+ 	add_employee(id, name, desig, pass);
+ 	take_attendance(id, att);
+ 	flag := to_login(id, pass);
+
+ 	if flag = 0 then
+ 		raise wrong_pass;
+ 	
+ 	elsif flag = -1 then
+ 		raise wrong_id;
+ 	else
+ 		NULL;
+ 	end if;
+
+ EXCEPTION
+ 	when wrong_pass then
+ 		dbms_output.put_line('Wrong password');
+ 	when wrong_id then
+ 		dbms_output.put_line('Invaild Id');
+ 	when wrong_attendance then
+ 		dbms_output.put_line('Only use A for absent and P for present');
+ 	when OTHERS then
+ 		dbms_output.put_line('Yet to be implemented. Please contact the developer.');
+
+ end;
+
+ -- RETRIEVAL OF TABLES RELATED TO EMPLOYEEES.
+
+
+
