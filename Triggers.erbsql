@@ -1,0 +1,12 @@
+/*
+ * Check constraint violated for attendance ORA-02290.
+ * To handle this this trigger will be used.
+ */
+
+ create or replace TRIGGER to_upper_case
+ 	before insert or update of attendance on ATTENDANCE
+ 	for each row
+ 	begin
+ 		:new.attendance := upper(:new.attendance);
+ end;
+
