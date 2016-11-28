@@ -1,6 +1,7 @@
 /*
  * Check constraint violated for attendance ORA-02290.
  * To handle this this trigger will be used.
+ * Also exception is caught in the execution block.
  */
 
  create or replace TRIGGER to_upper_case
@@ -8,5 +9,30 @@
  	for each row
  	begin
  		:new.attendance := upper(:new.attendance);
- end;
+ 	end;
 
+
+/*
+ * UPDATE EID 
+ */
+ create or replace TRIGGER to_update_employee
+ 	after update of eid on EMPLOYEE
+ 	for each row
+ 		begin
+ 			update LOGIN set eid = :new.eid where eid = :old.eid;
+ 			update ATTENDANCE set eid = :new.eid where eid = :old.eid;
+ 		end;
+
+ 
+
+/*
+ * DELETE EMPLOYEE DATA FROM ALL TABLES.
+ */
+create or replace TRIGGER to_delete_employee
+	after delete on EMPLOYEE
+	for each row
+		declare 
+		begin
+			delete LOGIN where eid = :old.eid;
+			delete attendance where eid = :old.eid;
+		end;	
